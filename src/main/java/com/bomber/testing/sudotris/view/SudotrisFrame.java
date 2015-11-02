@@ -1,4 +1,4 @@
-package com.bomber.testing.sudotris.frame;
+package com.bomber.testing.sudotris.view;
 
 import java.awt.Frame;
 import java.awt.event.KeyEvent;

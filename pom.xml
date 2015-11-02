@@ -49,10 +49,10 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4.2</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -64,7 +64,7 @@
 								<transformer
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
-										<Main-Class>com.bomber.testing.sudotris.frame.SudotrisFrame</Main-Class>
+										<Main-Class>com.bomber.testing.sudotris.view.SudotrisFrame</Main-Class>
 									</manifestEntries>
 								</transformer>
 							</transformers>
