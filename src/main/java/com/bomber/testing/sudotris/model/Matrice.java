@@ -68,7 +68,8 @@ public class Matrice {
 		for (int i = 0; i < game.size * game.size; i++)
 			positions.add(i);
 		Collections.shuffle(positions);
-		positions = positions.subList(0, (int) (Math.random() * 1000 % (game.size * game.size) + game.size));
+		positions = positions.subList(0,
+				(int) (Math.random() * 1000 % (game.size * game.size - game.size) + game.size));
 		return generateGame(game, positions);
 	}
 
