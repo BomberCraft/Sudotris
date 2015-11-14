@@ -76,15 +76,15 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 	private float nextNumberZOriginal;
 	private float nextNumberScale;
 	private Integer[] allNumbersToPlaces;
-	private boolean suspend = false;
-	private boolean solving = false;
+	private boolean suspend;
+	private boolean solving;
 
 	public static void main(String[] args) {
 		SudotrisFrame sudotris = new SudotrisFrame();
 		sudotris.start();
 	}
 
-	private void setDefaults() {
+	private void setViewDefaults() {
 		posX = 0f;
 		posY = 0f;
 
@@ -100,14 +100,20 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 
 		gameSpeed = 80;
 		hardMode = true;
-		// nextNumber = -1;
+
 		nextNumberZOriginal = -30;
-		nextNumberZ = nextNumberZOriginal;
 		nextNumberScale = .05f;
 	}
 
+	private void setRuntimeDefaults() {
+		nextNumberZ = nextNumberZOriginal;
+		suspend = false;
+		solving = false;
+	}
+
 	public SudotrisFrame() {
-		setDefaults();
+		setViewDefaults();
+		setRuntimeDefaults();
 
 		this.frame = new Frame("Simple OpenGL frame");
 		this.canvas = new GLCanvas();
@@ -404,6 +410,8 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 		gl.glPopMatrix();
 	}
 
+	// Debug
+	@SuppressWarnings("unused")
 	private void drawRepair(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 
@@ -665,7 +673,7 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 			/** Bloc pour réinitialiser la vue */
 			case KeyEvent.VK_C:
 			case KeyEvent.VK_NUMPAD5:
-				setDefaults();
+				setViewDefaults();
 				break;
 
 			case KeyEvent.VK_P:
@@ -680,9 +688,15 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 					new Thread(new Runnable() {
 						public void run() {
 							sudotris.solve();
+							solving = false;
 						}
 					}).start();
 				}
+				break;
+
+			case KeyEvent.VK_R:
+				setRuntimeDefaults();
+				sudotris = new Sudotris(gridSize);
 				break;
 		}
 
