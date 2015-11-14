@@ -20,29 +20,13 @@ public class Sudotris {
 	}
 
 	public Sudotris(int gridSize) {
-		this.finished = new Matrice(gridSize);
+		Matrice matrice = Matrice.Random();
+		Matrice solved = new Matrice(matrice);
+		solved.solve();
 
-		for (int i = 0; i < finished.getSize(); i++) {
-			for (int j = 0; j < finished.getSize(); j++) {
-				finished.setCell(i, j, (int) (Math.random() * 1000 % gridSize + 1));
-			}
-		}
-
-		this.original = new Matrice(finished);
-
-		int nbToClear = (int) (Math.random() * 1000 % (gridSize * gridSize - gridSize) + gridSize);
-		for (int i = 0; i < nbToClear; i++) {
-			int line;
-			int column;
-			do {
-				line = (int) (Math.random() * 1000 % (gridSize));
-				column = (int) (Math.random() * 1000 % (gridSize));
-			} while (original.getCell(line, column) == 0);
-
-			original.setCell(line, column, 0);
-		}
-
+		this.original = matrice;
 		this.current = new Matrice(original);
+		this.finished = solved;
 	}
 
 	public boolean isCellOriginal(int line, int column) {
@@ -79,4 +63,9 @@ public class Sudotris {
 
 		return numbers.toArray(new Integer[0]);
 	}
+
+	public void solve() {
+		current.solve(10);
+	}
+
 }

@@ -8,6 +8,8 @@ public class MatriceTest {
 
 	@Test
 	public void test() {
+		System.out.println("––––– Start: test –––––");
+
 		Matrice matrice1 = new Matrice();
 		System.out.println("----- matrice1 -----");
 		System.out.println(matrice1.toString());
@@ -52,6 +54,33 @@ public class MatriceTest {
 		System.out.println(matrice2.toString());
 		System.out.print("matrice1 == matrice2: ");
 		System.out.println(matrice1.equals(matrice2));
+
+		System.out.println("––––– End: test –––––");
 	}
 
+	@Test
+	public void testSolver() {
+		System.out.println("––––– Start: testSolver –––––");
+
+		Matrice matrice = new Matrice();
+		System.out.println(matrice);
+		matrice.solve(0);
+		System.out.println("–––––––––––––");
+		System.out.println(matrice);
+
+		System.out.println("––––– End: testSolver –––––");
+	}
+
+	@Test
+	public void testRandom() {
+		System.out.println("––––– Start: testRandom –––––");
+
+		Matrice matrice = Matrice.Random();
+		System.out.println(matrice);
+		matrice.solve(0);
+		System.out.println("–––––––––––––");
+		System.out.println(matrice);
+
+		System.out.println("––––– End: testRandom –––––");
+	}
 }

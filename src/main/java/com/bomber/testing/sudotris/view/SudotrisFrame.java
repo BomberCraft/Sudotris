@@ -76,6 +76,8 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 	private float nextNumberZOriginal;
 	private float nextNumberScale;
 	private Integer[] allNumbersToPlaces;
+	private boolean suspend = false;
+	private boolean solving = false;
 
 	public static void main(String[] args) {
 		SudotrisFrame sudotris = new SudotrisFrame();
@@ -153,8 +155,19 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 						return;
 					}
 
+					if (suspend) {
+						try {
+							game.sleep(100);
+							continue;
+						} catch (InterruptedException e) {
+							return;
+						}
+					}
+
+					allNumbersToPlaces = sudotris.getAllNumbersToPlace();
 					int length = allNumbersToPlaces.length;
 					if (length == 0) {
+						nextNumber = 0;
 						return;
 					}
 
@@ -179,6 +192,8 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 		allNumbersToPlaces = sudotris.getAllNumbersToPlace();
 		int length = allNumbersToPlaces.length;
 		nextNumber = allNumbersToPlaces[(int) (Math.random() * 1000 % length)];
+
+		System.err.println("NextNumber: " + nextNumber);
 	}
 
 	public void start() {
@@ -335,15 +350,17 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 		curX = curXY[0];
 		curY = curXY[1];
 
-		String cellValue = Integer.toString(nextNumber);
-		gl.glColor3f(.2f, .2f, .7f);
-		gl.glRasterPos3d(curX, curY, nextNumberZ);
-		glut.glutBitmapString(GLUT.BITMAP_HELVETICA_12, cellValue);
-
-		if (sudotris.getCell(gridX, gridY) == 0) {
-			gl.glColor3f(.4f, .4f, .4f);
-			gl.glRasterPos3d(curX, curY, -.3f);
+		if (nextNumber != 0) {
+			String cellValue = Integer.toString(nextNumber);
+			gl.glColor3f(.2f, .2f, .7f);
+			gl.glRasterPos3d(curX, curY, nextNumberZ);
 			glut.glutBitmapString(GLUT.BITMAP_HELVETICA_12, cellValue);
+
+			if (sudotris.getCell(gridX, gridY) == 0) {
+				gl.glColor3f(.4f, .4f, .4f);
+				gl.glRasterPos3d(curX, curY, -.3f);
+				glut.glutBitmapString(GLUT.BITMAP_HELVETICA_12, cellValue);
+			}
 		}
 	}
 
@@ -649,7 +666,23 @@ public class SudotrisFrame implements GLEventListener, KeyListener {
 			case KeyEvent.VK_C:
 			case KeyEvent.VK_NUMPAD5:
 				setDefaults();
+				break;
 
+			case KeyEvent.VK_P:
+				suspend = !suspend;
+				System.err.println((suspend ? "Paused" : "Resumed") + " the game");
+				break;
+
+			case KeyEvent.VK_I:
+				if (!solving) {
+					solving = true;
+					System.out.println("Solving current");
+					new Thread(new Runnable() {
+						public void run() {
+							sudotris.solve();
+						}
+					}).start();
+				}
 				break;
 		}
 
